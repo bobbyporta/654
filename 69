@@ -1,3 +1,19 @@
+from abc import ABC, abstractmethod
+
+# Base class
+class FreelanceJob(ABC):
+    def __init__(self, client_name, job_title):
+        self.client_name = client_name
+        self.job_title = job_title
+
+    @abstractmethod
+    def calculate_earnings(self):
+        pass
+
+    def describe_job(self):
+        return f"{self.job_title} for {self.client_name}"
+
+# Subclass 1: App Testing Job
 class AppTestingJob(FreelanceJob):
     def __init__(self, client_name, job_title, bugs_found, pay_per_bug, documented):
         super().__init__(client_name, job_title)
@@ -10,11 +26,7 @@ class AppTestingJob(FreelanceJob):
         bonus = 75 if self.documented else 0
         return round(base + bonus, 2)
 
-
-
-
-
-
+# Subclass 2: Voice Over Job
 class VoiceOverJob(FreelanceJob):
     def __init__(self, client_name, job_title, minutes_recorded, rate_per_minute, multilingual=False):
         super().__init__(client_name, job_title)
@@ -27,22 +39,35 @@ class VoiceOverJob(FreelanceJob):
         bonus = 100 if self.multilingual else 0
         return round(base + bonus, 2)
 
-
-
-
-
-
-
-
-
+# Subclass 3: Social Media Management Job
 class SocialMediaManagementJob(FreelanceJob):
     def __init__(self, client_name, job_title, posts_made, pay_per_post, engagement_rate):
         super().__init__(client_name, job_title)
         self.posts_made = posts_made
         self.pay_per_post = pay_per_post
-        self.engagement_rate = engagement_rate  # % as float (e.g., 0.15 for 15%)
+        self.engagement_rate = engagement_rate  # e.g., 0.15 = 15%
 
     def calculate_earnings(self):
         base = self.posts_made * self.pay_per_post
         bonus = 50 if self.engagement_rate >= 0.10 else 0
         return round(base + bonus, 2)
+
+# Function: Generate invoice
+def generate_invoice(job_list):
+    print("------ Freelance Invoice ------")
+    total = 0
+    for job in job_list:
+        earnings = job.calculate_earnings()
+        print(f"Client: {job.client_name} | Job: {job.job_title} | Earnings: ${earnings}")
+        total += earnings
+    print(f"\nTotal Earnings: ${round(total, 2)}")
+
+# Example usage
+if __name__ == "__main__":
+    jobs = [
+        AppTestingJob("TechNova", "Bug Hunt", bugs_found=12, pay_per_bug=10, documented=True),
+        VoiceOverJob("VoicePro", "Narration Project", minutes_recorded=45, rate_per_minute=3.5, multilingual=True),
+        SocialMediaManagementJob("Trendify", "Weekly Campaign", posts_made=8, pay_per_post=25, engagement_rate=0.12)
+    ]
+
+    generate_invoice(jobs)
