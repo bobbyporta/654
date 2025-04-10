@@ -1,0 +1,53 @@
+from abc import ABC, abstractmethod
+
+# Base class
+class FreelanceJob(ABC):
+    def __init__(self, client_name, job_title):
+        self.client_name = client_name
+        self.job_title = job_title
+
+    @abstractmethod
+    def calculate_earnings(self):
+        pass
+
+    def describe_job(self):
+        return f"{self.job_title} for {self.client_name}"
+
+# Subclass for hourly jobs
+class HourlyJob(FreelanceJob):
+    def __init__(self, client_name, job_title, hours_worked, hourly_rate):
+        super().__init__(client_name, job_title)
+        self.hours_worked = hours_worked
+        self.hourly_rate = hourly_rate
+
+    def calculate_earnings(self):
+        return round(self.hours_worked * self.hourly_rate, 2)
+
+# Subclass for fixed-price jobs
+class FixedPriceJob(FreelanceJob):
+    def __init__(self, client_name, job_title, total_payment):
+        super().__init__(client_name, job_title)
+        self.total_payment = total_payment
+
+    def calculate_earnings(self):
+        return round(self.total_payment, 2)
+
+# Subclass for commission-based jobs
+class CommissionJob(FreelanceJob):
+    def __init__(self, client_name, job_title, sales_amount, commission_rate):
+        super().__init__(client_name, job_title)
+        self.sales_amount = sales_amount
+        self.commission_rate = commission_rate  # e.g., 0.10 for 10%
+
+    def calculate_earnings(self):
+        return round(self.sales_amount * self.commission_rate, 2)
+
+# Example usage
+jobs = [
+    HourlyJob("Acme Corp", "Web Development", hours_worked=35, hourly_rate=30),
+    FixedPriceJob("Global Media", "Logo Design", total_payment=500),
+    CommissionJob("Book Publisher", "Book Sales", sales_amount=10000, commission_rate=0.12)
+]
+
+for job in jobs:
+    print(f"{job.describe_job()} earns: ${job.calculate_earnings()}")
