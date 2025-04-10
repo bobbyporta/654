@@ -1,0 +1,48 @@
+class AppTestingJob(FreelanceJob):
+    def __init__(self, client_name, job_title, bugs_found, pay_per_bug, documented):
+        super().__init__(client_name, job_title)
+        self.bugs_found = bugs_found
+        self.pay_per_bug = pay_per_bug
+        self.documented = documented
+
+    def calculate_earnings(self):
+        base = self.bugs_found * self.pay_per_bug
+        bonus = 75 if self.documented else 0
+        return round(base + bonus, 2)
+
+
+
+
+
+
+class VoiceOverJob(FreelanceJob):
+    def __init__(self, client_name, job_title, minutes_recorded, rate_per_minute, multilingual=False):
+        super().__init__(client_name, job_title)
+        self.minutes_recorded = minutes_recorded
+        self.rate_per_minute = rate_per_minute
+        self.multilingual = multilingual
+
+    def calculate_earnings(self):
+        base = self.minutes_recorded * self.rate_per_minute
+        bonus = 100 if self.multilingual else 0
+        return round(base + bonus, 2)
+
+
+
+
+
+
+
+
+
+class SocialMediaManagementJob(FreelanceJob):
+    def __init__(self, client_name, job_title, posts_made, pay_per_post, engagement_rate):
+        super().__init__(client_name, job_title)
+        self.posts_made = posts_made
+        self.pay_per_post = pay_per_post
+        self.engagement_rate = engagement_rate  # % as float (e.g., 0.15 for 15%)
+
+    def calculate_earnings(self):
+        base = self.posts_made * self.pay_per_post
+        bonus = 50 if self.engagement_rate >= 0.10 else 0
+        return round(base + bonus, 2)
